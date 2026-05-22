@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>汉语学习 · HSK1 Chinese</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C0392B;
+    --red-light: #FADBD8;
+    --red-mid: #E74C3C;
+    --gold: #D4A017;
+    --gold-light: #FEF9E7;
+    --gold-mid: #F1C40F;
+    --ink: #1A1208;
+    --ink2: #3D2B1F;
+    --paper: #FDF6EC;
+    --paper2: #F5E6CC;
+    --paper3: #EDD9A3;
+    --sage: #2E7D52;
+    --sage-light: #E8F5EE;
+    --blue-ink: #1B4F72;
+    --blue-light: #D6EAF8;
+    --purple: #6C3483;
+    --purple-light: #E8DAEF;
+    --border: rgba(180,120,60,0.25);
+    --shadow: 0 2px 12px rgba(60,20,0,0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--ink);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--red);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-char {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold-mid);
+    line-height: 1;
+  }
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+  }
+  .logo-text span:first-child {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .logo-text span:last-child {
+    color: var(--paper3);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+  }
+  .nav-tab {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .nav-tab:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .nav-tab.active {
+    background: var(--red);
+    color: #fff;
+  }
+  .hsk-badge {
+    background: var(--gold-mid);
+    color: var(--ink);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.08em;
+  }
+
+  /* SECTIONS */
+  .section { display: none; animation: fadeIn 0.35s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* HERO BANNER */
+  .hero {
+    background: linear-gradient(135deg, var(--ink) 0%, #3D2B1F 100%);
+    padding: 3rem 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: attr(data-char);
+    position: absolute;
+    right: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Noto Serif SC', serif;
+    font-size: 160px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-mid);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .hero h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.6);
+    font-size: 15px;
+    max-width: 500px;
+    line-height: 1.7;
+  }
+
+  /* CONTENT AREA */
+  .content { padding: 2rem 3rem 3rem; }
+
+  /* PINYIN SECTION */
+  .pinyin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+    margin-bottom: 2rem;
+  }
+  .pinyin-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .pinyin-card:hover, .pinyin-card.active {
+    border-color: var(--red);
+    background: var(--red-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .pinyin-card .roman {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .pinyin-card .tones-row {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  .tone-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--paper3);
+  }
+  .tone-dot.has { background: var(--red); }
+
+  .pinyin-detail {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    display: none;
+  }
+  .pinyin-detail.visible { display: block; animation: fadeIn 0.3s ease; }
+  .detail-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  .detail-big {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 72px;
+    font-weight: 700;
+    color: var(--red);
+    line-height: 1;
+    min-width: 100px;
+    text-align: center;
+  }
+  .detail-info { flex: 1; }
+  .detail-info h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--ink2);
+  }
+  .tone-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .tone-card {
+    background: var(--paper);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+  .tone-card .tone-syllable {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--ink);
+    font-family: 'Noto Serif SC', serif;
+  }
+  .tone-card .tone-mark {
+    font-size: 11px;
+    color: var(--ink2);
+    margin: 4px 0;
+    font-weight: 500;
+  }
+  .tone-card .tone-example {
+    font-size: 20px;
+    font-family: 'Noto Serif SC', serif;
+    color: var(--red);
+  }
+  .tone-card .tone-meaning {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+  }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .tab-group {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--ink2);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tab-btn:hover { border-color: var(--red); color: var(--red); }
+  .tab-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+  /* WORDS SECTION */
+  .word-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .word-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.22s;
+    position: relative;
+    overflow: hidden;
+  }
+  .word-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--red);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+  .word-card:hover::before, .word-card.flipped::before { transform: scaleX(1); }
+  .word-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+  .word-front, .word-back { transition: opacity 0.2s; }
+  .word-card.flipped .word-front { display: none; }
+  .word-card:not(.flipped) .word-back { display: none; }
+  .word-hanzi {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .word-pinyin {
+    font-size: 14px;
+    color: var(--red);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .word-type {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--paper2);
+    color: var(--ink2);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .word-back-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .word-meaning {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .word-example {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    color: var(--ink2);
+  }
+  .word-example-en {
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+  }
+  .flip-hint {
+    font-size: 10px;
+    color: #aaa;
+    text-align: right;
+    margin-top: 6px;
+  }
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 2rem 0 1rem;
+  }
+  .category-header h3 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink2);
+  }
+  .category-header::before {
+    content: '';
+    width: 20px; height: 2px;
+    background: var(--red);
+    border-radius: 2px;
+  }
+  .count-badge {
+    background: var(--paper2);
+    color: var(--ink2);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  /* GRAMMAR SECTION */
+  .grammar-list { display: flex; flex-direction: column; gap: 16px; }
+  .grammar-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .grammar-header {
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.2s;
+  }
+  .grammar-header:hover { background: var(--paper); }
+  .grammar-header-left { display: flex; align-items: center; gap: 14px; }
+  .grammar-num {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--red);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .grammar-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .grammar-subtitle {
+    font-size: 12px;
+    color: #888;
+    margin-top: 2px;
+  }
+  .grammar-toggle {
+    font-size: 20px;
+    color: #aaa;
+    transition: transform 0.25s;
+    line-height: 1;
+  }
+  .grammar-card.open .grammar-toggle { transform: rotate(180deg); }
+  .grammar-body {
+    display: none;
+    padding: 0 1.5rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .grammar-card.open .grammar-body { display: block; animation: fadeIn 0.25s ease; }
+  .pattern-box {
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 18px;
+    color: var(--ink2);
+    border-left: 3px solid var(--red);
+  }
+  .pattern-box .pattern-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .grammar-examples { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  .grammar-example {
+    background: var(--blue-light);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .ge-cn {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 18px;
+    color: var(--blue-ink);
+    margin-bottom: 2px;
+  }
+  .ge-py { font-size: 12px; color: var(--blue-ink); opacity: 0.7; margin-bottom: 2px; }
+  .ge-en { font-size: 13px; color: #555; font-style: italic; }
+  .grammar-note {
+    background: var(--gold-light);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--ink2);
+    border-left: 3px solid var(--gold);
+  }
+  .grammar-note strong { color: var(--gold); }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap {
+    background: var(--paper2);
+    border-radius: 20px;
+    height: 6px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--red);
+    border-radius: 20px;
+    transition: width 0.6s ease;
+  }
+
+  /* QUIZ STRIP */
+  .quiz-strip {
+    background: var(--ink);
+    border-radius: 14px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .quiz-strip-text h3 { color: #fff; font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .quiz-strip-text p { color: rgba(255,255,255,0.5); font-size: 13px; }
+  .quiz-btn {
+    background: var(--red);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .quiz-btn:hover { background: #a93226; }
+
+  /* QUIZ MODAL */
+  .quiz-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .quiz-overlay.open { display: flex; }
+  .quiz-modal {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 480px;
+    max-width: 95vw;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    animation: fadeIn 0.3s ease;
+  }
+  .quiz-modal h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .quiz-q {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 52px;
+    text-align: center;
+    color: var(--ink);
+    margin: 1.5rem 0;
+    line-height: 1;
+  }
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+  .quiz-opt {
+    padding: 14px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    background: var(--paper);
+    transition: all 0.18s;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .quiz-opt:hover { border-color: var(--red); background: var(--red-light); }
+  .quiz-opt.correct { border-color: var(--sage); background: var(--sage-light); color: var(--sage); }
+  .quiz-opt.wrong { border-color: var(--red); background: var(--red-light); color: var(--red); }
+  .quiz-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .quiz-close {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+  }
+  .quiz-score { font-size: 13px; color: #888; }
+  .quiz-next {
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .quiz-next.show { display: block; }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 1rem; }
+    .content { padding: 1.5rem 1rem 2rem; }
+    .hero { padding: 2rem 1.5rem; }
+    .hero h1 { font-size: 2rem; }
+    .tone-cards { grid-template-columns: repeat(2, 1fr); }
+    .nav-tab { padding: 7px 12px; font-size: 13px; }
+    .hsk-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-char">汉</div>
+    <div class="logo-text">
+      <span>Learn Chinese</span>
+      <span>Mandarin Basics</span>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('pinyin')">Pinyin</button>
+    <button class="nav-tab" onclick="showSection('words')">Words</button>
+    <button class="nav-tab" onclick="showSection('grammar')">Grammar</button>
+  </div>
+  <div class="hsk-badge">HSK 1</div>
+</nav>
+
+<!-- PINYIN SECTION -->
+<div id="section-pinyin" class="section active">
+  <div class="hero" data-char="拼">
+    <div class="hero-label">Module 01</div>
+    <h1>Learn Pinyin<br>学拼音</h1>
+    <p>Pinyin is the romanisation system for Mandarin Chinese. Master the sounds and four tones to build a solid pronunciation foundation.</p>
+  </div>
+  <div class="content">
+    <div class="quiz-strip">
+      <div class="quiz-strip-text">
+        <h3>Test Your Tones</h3>
+        <p>Quiz yourself on tone recognition</p>
+      </div>
+      <button class="quiz-btn" onclick="startQuiz('tones')">Start Quiz →</button>
+    </div>
+
+    <div class="section-label">The Four Tones</div>
+    <div class="tone-cards" style="margin-bottom:2rem">
+      <div class="tone-card">
+        <div class="tone-syllable">ā</div>
+        <div class="tone-mark">1st Tone — High Level</div>
+        <div class="tone-example">妈</div>
+        <div class="tone-meaning">mā — mother</div>
+        <div style="font-size:28px;margin-top:6px;color:var(--red)">‾</div>
+      </div>
+      <div class="tone-card">
+        <div class="tone-syllable">á</div>
+        <div class="tone-mark">2nd Tone — Rising</div>
+        <div class="tone-example">麻</div>
+        <div class="tone-meaning">má — hemp/numb</div>
+        <div style="font-size:22px;margin-top:6px;color:var(--sage)">↗</div>
+      </div>
+      <div class="tone-card">
+        <div class="tone-syllable">ǎ</div>
+        <div class="tone-mark">3rd Tone — Dip-Rise</div>
+        <div class="tone-example">马</div>
+        <div class="tone-meaning">mǎ — horse</div>
+        <div style="font-size:22px;margin-top:6px;color:var(--blue-ink)">↘↗</div>
+      </div>
+      <div class="tone-card">
+        <div class="tone-syllable">à</div>
+        <div class="tone-mark">4th Tone — Falling</div>
+        <div class="tone-example">骂</div>
+        <div class="tone-meaning">mà — scold</div>
+        <div style="font-size:22px;margin-top:6px;color:var(--purple)">↘</div>
+      </div>
+    </div>
+
+    <div class="section-label">Initials — click to explore</div>
+    <div class="tab-group">
+      <button class="tab-btn active" onclick="filterPinyin('all', this)">All</button>
+      <button class="tab-btn" onclick="filterPinyin('labial', this)">Labial (b p m f)</button>
+      <button class="tab-btn" onclick="filterPinyin('dental', this)">Dental (d t n l)</button>
+      <button class="tab-btn" onclick="filterPinyin('velar', this)">Velar (g k h)</button>
+      <button class="tab-btn" onclick="filterPinyin('palatal', this)">Palatal (j q x)</button>
+      <button class="tab-btn" onclick="filterPinyin('retroflex', this)">Retroflex (zh ch sh r)</button>
+      <button class="tab-btn" onclick="filterPinyin('sibilant', this)">Sibilant (z c s)</button>
+    </div>
+    <div class="pinyin-grid" id="pinyinGrid"></div>
+    <div class="pinyin-detail" id="pinyinDetail"></div>
+
+    <div class="section-label" style="margin-top:2rem">Finals — Vowel Sounds</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px">
+      <div id="finalCards"></div>
+    </div>
+    <div id="finalsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px"></div>
+  </div>
+</div>
+
+<!-- WORDS SECTION -->
+<div id="section-words" class="section">
+  <div class="hero" data-char="词">
+    <div class="hero-label">Module 02</div>
+    <h1>Learn Words<br>学词汇</h1>
+    <p>HSK 1 contains 150 essential words. Click a card to flip it and reveal the meaning and an example sentence.</p>
+  </div>
+  <div class="content">
+    <div class="quiz-strip">
+      <div class="quiz-strip-text">
+        <h3>Flashcard Quiz</h3>
+        <p>Test your HSK1 vocabulary</p>
+      </div>
+      <button class="quiz-btn" onclick="startQuiz('words')">Start Quiz →</button>
+    </div>
+
+    <div class="tab-group" id="wordCatTabs">
+      <button class="tab-btn active" onclick="filterWords('all', this)">All (150)</button>
+      <button class="tab-btn" onclick="filterWords('people', this)">People</button>
+      <button class="tab-btn" onclick="filterWords('time', this)">Time</button>
+      <button class="tab-btn" onclick="filterWords('numbers', this)">Numbers</button>
+      <button class="tab-btn" onclick="filterWords('verbs', this)">Verbs</button>
+      <button class="tab-btn" onclick="filterWords('adjectives', this)">Adjectives</button>
+      <button class="tab-btn" onclick="filterWords('objects', this)">Objects</button>
+      <button class="tab-btn" onclick="filterWords('places', this)">Places</button>
+    </div>
+    <div id="wordContainer"></div>
+  </div>
+</div>
+
+<!-- GRAMMAR SECTION -->
+<div id="section-grammar" class="section">
+  <div class="hero" data-char="语">
+    <div class="hero-label">Module 03</div>
+    <h1>Learn Grammar<br>学语法</h1>
+    <p>Mandarin grammar is logical and pattern-based. Master these 10 core HSK1 structures and you can express a wide range of ideas.</p>
+  </div>
+  <div class="content">
+    <div class="grammar-list" id="grammarList"></div>
+  </div>
+</div>
+
+<!-- QUIZ OVERLAY -->
+<div class="quiz-overlay" id="quizOverlay">
+  <div class="quiz-modal">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
+      <h2 id="quizTitle">Quiz</h2>
+      <button class="quiz-close" onclick="closeQuiz()">×</button>
+    </div>
+    <div class="quiz-score" id="quizScore">Question 1 / 10 · Score: 0</div>
+    <div class="progress-bar-wrap" style="margin-top:8px;margin-bottom:0">
+      <div class="progress-bar" id="quizProgress" style="width:10%"></div>
+    </div>
+    <div class="quiz-q" id="quizQ">?</div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-footer">
+      <div id="quizFeedback" style="font-size:14px;color:#888"></div>
+      <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════ DATA ════════════════════════════════
+
+const INITIALS = [
+  {r:'b',g:'labial',ex:'bā',ch:'八',m:'eight'},
+  {r:'p',g:'labial',ex:'pà',ch:'怕',m:'fear'},
+  {r:'m',g:'labial',ex:'māo',ch:'猫',m:'cat'},
+  {r:'f',g:'labial',ex:'fēi',ch:'飞',m:'fly'},
+  {r:'d',g:'dental',ex:'dà',ch:'大',m:'big'},
+  {r:'t',g:'dental',ex:'tā',ch:'他',m:'he'},
+  {r:'n',g:'dental',ex:'nǎ',ch:'哪',m:'which'},
+  {r:'l',g:'dental',ex:'lái',ch:'来',m:'come'},
+  {r:'g',g:'velar',ex:'gē',ch:'哥',m:'brother'},
+  {r:'k',g:'velar',ex:'kāi',ch:'开',m:'open'},
+  {r:'h',g:'velar',ex:'hǎo',ch:'好',m:'good'},
+  {r:'j',g:'palatal',ex:'jiā',ch:'家',m:'home'},
+  {r:'q',g:'palatal',ex:'qù',ch:'去',m:'go'},
+  {r:'x',g:'palatal',ex:'xiǎo',ch:'小',m:'small'},
+  {r:'zh',g:'retroflex',ex:'zhè',ch:'这',m:'this'},
+  {r:'ch',g:'retroflex',ex:'chī',ch:'吃',m:'eat'},
+  {r:'sh',g:'retroflex',ex:'shì',ch:'是',m:'is/am/are'},
+  {r:'r',g:'retroflex',ex:'rén',ch:'人',m:'person'},
+  {r:'z',g:'sibilant',ex:'zài',ch:'在',m:'at'},
+  {r:'c',g:'sibilant',ex:'cí',ch:'词',m:'word'},
+  {r:'s',g:'sibilant',ex:'sān',ch:'三',m:'three'},
+  {r:'y',g:'palatal',ex:'yī',ch:'一',m:'one'},
+  {r:'w',g:'labial',ex:'wǒ',ch:'我',m:'I/me'},
+];
+
+const FINALS = [
+  {r:'a',m:'ah'},{r:'o',m:'oh'},{r:'e',m:'uh'},{r:'i',m:'ee'},{r:'u',m:'oo'},
+  {r:'ü',m:'yu'},{r:'ai',m:'eye'},{r:'ei',m:'ay'},{r:'ao',m:'ow'},{r:'ou',m:'oh'},
+  {r:'an',m:'an'},{r:'en',m:'un'},{r:'ang',m:'ahng'},{r:'eng',m:'ung'},{r:'ong',m:'ong'},
+  {r:'ia',m:'ya'},{r:'ie',m:'yeh'},{r:'iao',m:'yow'},{r:'iu',m:'yo'},{r:'ian',m:'yen'},
+  {r:'in',m:'een'},{r:'iang',m:'yang'},{r:'ing',m:'ing'},{r:'ua',m:'wa'},{r:'uo',m:'wo'},
+];
+
+const WORDS = [
+  // People
+  {h:'我',p:'wǒ',e:'I / me',t:'pronoun',c:'people',ex:'我是学生',ep:'wǒ shì xuéshēng',ee:"I'm a student"},
+  {h:'你',p:'nǐ',e:'you',t:'pronoun',c:'people',ex:'你好！',ep:'nǐ hǎo',ee:'Hello!'},
+  {h:'他',p:'tā',e:'he / him',t:'pronoun',c:'people',ex:'他是老师',ep:'tā shì lǎoshī',ee:'He is a teacher'},
+  {h:'她',p:'tā',e:'she / her',t:'pronoun',c:'people',ex:'她很漂亮',ep:'tā hěn piàoliang',ee:'She is very pretty'},
+  {h:'我们',p:'wǒmen',e:'we / us',t:'pronoun',c:'people',ex:'我们吃饭',ep:'wǒmen chīfàn',ee:'We eat'},
+  {h:'你们',p:'nǐmen',e:'you (plural)',t:'pronoun',c:'people',ex:'你们好！',ep:'nǐmen hǎo',ee:'Hello everyone!'},
+  {h:'他们',p:'tāmen',e:'they / them',t:'pronoun',c:'people',ex:'他们是朋友',ep:'tāmen shì péngyǒu',ee:'They are friends'},
+  {h:'朋友',p:'péngyǒu',e:'friend',t:'noun',c:'people',ex:'他是我的朋友',ep:'tā shì wǒ de péngyǒu',ee:'He is my friend'},
+  {h:'老师',p:'lǎoshī',e:'teacher',t:'noun',c:'people',ex:'老师好！',ep:'lǎoshī hǎo',ee:'Hello teacher!'},
+  {h:'学生',p:'xuéshēng',e:'student',t:'noun',c:'people',ex:'我是学生',ep:'wǒ shì xuéshēng',ee:'I am a student'},
+  {h:'妈妈',p:'māma',e:'mother / mom',t:'noun',c:'people',ex:'我妈妈很好',ep:'wǒ māma hěn hǎo',ee:'My mom is very well'},
+  {h:'爸爸',p:'bàba',e:'father / dad',t:'noun',c:'people',ex:'爸爸在家',ep:'bàba zài jiā',ee:'Dad is at home'},
+  // Numbers
+  {h:'一',p:'yī',e:'one',t:'number',c:'numbers',ex:'一个苹果',ep:'yī gè píngguǒ',ee:'one apple'},
+  {h:'二',p:'èr',e:'two',t:'number',c:'numbers',ex:'二月',ep:'èr yuè',ee:'February'},
+  {h:'三',p:'sān',e:'three',t:'number',c:'numbers',ex:'三个人',ep:'sān gè rén',ee:'three people'},
+  {h:'四',p:'sì',e:'four',t:'number',c:'numbers',ex:'四只猫',ep:'sì zhī māo',ee:'four cats'},
+  {h:'五',p:'wǔ',e:'five',t:'number',c:'numbers',ex:'五岁',ep:'wǔ suì',ee:'five years old'},
+  {h:'六',p:'liù',e:'six',t:'number',c:'numbers',ex:'六月',ep:'liù yuè',ee:'June'},
+  {h:'七',p:'qī',e:'seven',t:'number',c:'numbers',ex:'七天',ep:'qī tiān',ee:'seven days'},
+  {h:'八',p:'bā',e:'eight',t:'number',c:'numbers',ex:'八月',ep:'bā yuè',ee:'August'},
+  {h:'九',p:'jiǔ',e:'nine',t:'number',c:'numbers',ex:'九号',ep:'jiǔ hào',ee:'9th (date)'},
+  {h:'十',p:'shí',e:'ten',t:'number',c:'numbers',ex:'十分钟',ep:'shí fēnzhōng',ee:'ten minutes'},
+  {h:'百',p:'bǎi',e:'hundred',t:'number',c:'numbers',ex:'一百块',ep:'yī bǎi kuài',ee:'one hundred yuan'},
+  {h:'千',p:'qiān',e:'thousand',t:'number',c:'numbers',ex:'一千人',ep:'yī qiān rén',ee:'one thousand people'},
+  // Time
+  {h:'今天',p:'jīntiān',e:'today',t:'noun',c:'time',ex:'今天是星期一',ep:'jīntiān shì xīngqīyī',ee:'Today is Monday'},
+  {h:'明天',p:'míngtiān',e:'tomorrow',t:'noun',c:'time',ex:'明天见！',ep:'míngtiān jiàn',ee:'See you tomorrow!'},
+  {h:'昨天',p:'zuótiān',e:'yesterday',t:'noun',c:'time',ex:'昨天很冷',ep:'zuótiān hěn lěng',ee:'Yesterday was very cold'},
+  {h:'现在',p:'xiànzài',e:'now',t:'adverb',c:'time',ex:'现在几点？',ep:'xiànzài jǐ diǎn',ee:'What time is it now?'},
+  {h:'上午',p:'shàngwǔ',e:'morning (AM)',t:'noun',c:'time',ex:'上午八点',ep:'shàngwǔ bā diǎn',ee:'8 AM'},
+  {h:'下午',p:'xiàwǔ',e:'afternoon (PM)',t:'noun',c:'time',ex:'下午三点',ep:'xiàwǔ sān diǎn',ee:'3 PM'},
+  {h:'年',p:'nián',e:'year',t:'noun',c:'time',ex:'今年',ep:'jīnnián',ee:'this year'},
+  {h:'月',p:'yuè',e:'month',t:'noun',c:'time',ex:'这个月',ep:'zhège yuè',ee:'this month'},
+  {h:'日',p:'rì',e:'day / date',t:'noun',c:'time',ex:'一号',ep:'yī hào',ee:'the 1st'},
+  {h:'星期',p:'xīngqī',e:'week',t:'noun',c:'time',ex:'下个星期',ep:'xià gè xīngqī',ee:'next week'},
+  // Verbs
+  {h:'是',p:'shì',e:'to be (is/am/are)',t:'verb',c:'verbs',ex:'我是中国人',ep:'wǒ shì zhōngguórén',ee:'I am Chinese'},
+  {h:'有',p:'yǒu',e:'to have',t:'verb',c:'verbs',ex:'我有一本书',ep:'wǒ yǒu yī běn shū',ee:'I have a book'},
+  {h:'吃',p:'chī',e:'to eat',t:'verb',c:'verbs',ex:'我吃饭',ep:'wǒ chīfàn',ee:'I eat'},
+  {h:'喝',p:'hē',e:'to drink',t:'verb',c:'verbs',ex:'我喝水',ep:'wǒ hē shuǐ',ee:'I drink water'},
+  {h:'来',p:'lái',e:'to come',t:'verb',c:'verbs',ex:'你来！',ep:'nǐ lái',ee:'Come here!'},
+  {h:'去',p:'qù',e:'to go',t:'verb',c:'verbs',ex:'我去学校',ep:'wǒ qù xuéxiào',ee:'I go to school'},
+  {h:'说',p:'shuō',e:'to speak / say',t:'verb',c:'verbs',ex:'他说中文',ep:'tā shuō zhōngwén',ee:'He speaks Chinese'},
+  {h:'看',p:'kàn',e:'to look / watch',t:'verb',c:'verbs',ex:'看书',ep:'kàn shū',ee:'read a book'},
+  {h:'听',p:'tīng',e:'to listen',t:'verb',c:'verbs',ex:'听音乐',ep:'tīng yīnyuè',ee:'listen to music'},
+  {h:'写',p:'xiě',e:'to write',t:'verb',c:'verbs',ex:'写字',ep:'xiě zì',ee:'write characters'},
+  {h:'买',p:'mǎi',e:'to buy',t:'verb',c:'verbs',ex:'买苹果',ep:'mǎi píngguǒ',ee:'buy apples'},
+  {h:'叫',p:'jiào',e:'to be called / call',t:'verb',c:'verbs',ex:'你叫什么名字？',ep:'nǐ jiào shénme míngzì',ee:"What's your name?"},
+  {h:'认识',p:'rènshi',e:'to know (a person)',t:'verb',c:'verbs',ex:'我认识他',ep:'wǒ rènshi tā',ee:'I know him'},
+  {h:'喜欢',p:'xǐhuan',e:'to like',t:'verb',c:'verbs',ex:'我喜欢中文',ep:'wǒ xǐhuan zhōngwén',ee:'I like Chinese'},
+  {h:'想',p:'xiǎng',e:'to want / think',t:'verb',c:'verbs',ex:'我想吃饭',ep:'wǒ xiǎng chīfàn',ee:'I want to eat'},
+  {h:'在',p:'zài',e:'at / in / on / to be at',t:'verb',c:'verbs',ex:'我在家',ep:'wǒ zài jiā',ee:"I'm at home"},
+  // Adjectives
+  {h:'好',p:'hǎo',e:'good',t:'adj',c:'adjectives',ex:'很好！',ep:'hěn hǎo',ee:'Very good!'},
+  {h:'大',p:'dà',e:'big / large',t:'adj',c:'adjectives',ex:'大苹果',ep:'dà píngguǒ',ee:'big apple'},
+  {h:'小',p:'xiǎo',e:'small / little',t:'adj',c:'adjectives',ex:'小猫',ep:'xiǎo māo',ee:'little cat'},
+  {h:'多',p:'duō',e:'many / much',t:'adj',c:'adjectives',ex:'很多人',ep:'hěn duō rén',ee:'many people'},
+  {h:'少',p:'shǎo',e:'few / little',t:'adj',c:'adjectives',ex:'很少',ep:'hěn shǎo',ee:'very few'},
+  {h:'冷',p:'lěng',e:'cold',t:'adj',c:'adjectives',ex:'今天很冷',ep:'jīntiān hěn lěng',ee:"Today it's very cold"},
+  {h:'热',p:'rè',e:'hot',t:'adj',c:'adjectives',ex:'天气很热',ep:'tiānqì hěn rè',ee:"The weather is very hot"},
+  {h:'高兴',p:'gāoxìng',e:'happy',t:'adj',c:'adjectives',ex:'我很高兴',ep:'wǒ hěn gāoxìng',ee:"I'm very happy"},
+  {h:'漂亮',p:'piàoliang',e:'beautiful',t:'adj',c:'adjectives',ex:'她很漂亮',ep:'tā hěn piàoliang',ee:'She is beautiful'},
+  {h:'贵',p:'guì',e:'expensive',t:'adj',c:'adjectives',ex:'太贵了！',ep:'tài guì le',ee:'Too expensive!'},
+  // Objects
+  {h:'书',p:'shū',e:'book',t:'noun',c:'objects',ex:'一本书',ep:'yī běn shū',ee:'a book'},
+  {h:'水',p:'shuǐ',e:'water',t:'noun',c:'objects',ex:'喝水',ep:'hē shuǐ',ee:'drink water'},
+  {h:'饭',p:'fàn',e:'rice / meal',t:'noun',c:'objects',ex:'吃饭',ep:'chīfàn',ee:'have a meal'},
+  {h:'茶',p:'chá',e:'tea',t:'noun',c:'objects',ex:'喝茶',ep:'hē chá',ee:'drink tea'},
+  {h:'苹果',p:'píngguǒ',e:'apple',t:'noun',c:'objects',ex:'吃苹果',ep:'chī píngguǒ',ee:'eat an apple'},
+  {h:'猫',p:'māo',e:'cat',t:'noun',c:'objects',ex:'一只猫',ep:'yī zhī māo',ee:'a cat'},
+  {h:'狗',p:'gǒu',e:'dog',t:'noun',c:'objects',ex:'大狗',ep:'dà gǒu',ee:'big dog'},
+  {h:'手机',p:'shǒujī',e:'mobile phone',t:'noun',c:'objects',ex:'买手机',ep:'mǎi shǒujī',ee:'buy a phone'},
+  {h:'电脑',p:'diànnǎo',e:'computer',t:'noun',c:'objects',ex:'用电脑',ep:'yòng diànnǎo',ee:'use a computer'},
+  {h:'钱',p:'qián',e:'money',t:'noun',c:'objects',ex:'多少钱？',ep:'duōshǎo qián',ee:'How much money?'},
+  {h:'杯子',p:'bēizi',e:'cup',t:'noun',c:'objects',ex:'一个杯子',ep:'yī gè bēizi',ee:'a cup'},
+  // Places
+  {h:'中国',p:'Zhōngguó',e:'China',t:'noun',c:'places',ex:'我在中国',ep:'wǒ zài zhōngguó',ee:"I'm in China"},
+  {h:'北京',p:'Běijīng',e:'Beijing',t:'noun',c:'places',ex:'去北京',ep:'qù Běijīng',ee:'go to Beijing'},
+  {h:'学校',p:'xuéxiào',e:'school',t:'noun',c:'places',ex:'去学校',ep:'qù xuéxiào',ee:'go to school'},
+  {h:'家',p:'jiā',e:'home / family',t:'noun',c:'places',ex:'在家',ep:'zài jiā',ee:'at home'},
+  {h:'医院',p:'yīyuàn',e:'hospital',t:'noun',c:'places',ex:'去医院',ep:'qù yīyuàn',ee:'go to hospital'},
+  {h:'商店',p:'shāngdiàn',e:'shop / store',t:'noun',c:'places',ex:'在商店',ep:'zài shāngdiàn',ee:'in the shop'},
+  {h:'饭店',p:'fàndiàn',e:'restaurant / hotel',t:'noun',c:'places',ex:'去饭店',ep:'qù fàndiàn',ee:'go to restaurant'},
+  {h:'飞机场',p:'fēijīchǎng',e:'airport',t:'noun',c:'places',ex:'在飞机场',ep:'zài fēijīchǎng',ee:'at the airport'},
+];
+
+const GRAMMAR = [
+  {
+    title: 'Subject + Verb + Object (SVO)',
+    sub: 'Basic sentence word order',
+    pattern: 'Subject + Verb + Object',
+    notes: 'Chinese word order is similar to English: Subject → Verb → Object. This is the most common structure.',
+    examples: [
+      {cn:'我吃饭。',py:'Wǒ chī fàn.',en:'I eat rice.'},
+      {cn:'她喝水。',py:'Tā hē shuǐ.',en:'She drinks water.'},
+      {cn:'他看书。',py:'Tā kàn shū.',en:'He reads a book.'},
+    ],
+    note: '<strong>Tip:</strong> Unlike English, Chinese verbs do NOT change form for tense. Context or time words indicate when something happens.'
+  },
+  {
+    title: '是 (shì) — The Verb "To Be"',
+    sub: 'Expressing identity and classification',
+    pattern: 'Subject + 是 + Noun',
+    notes: '是 (shì) links a subject to a noun or classification. It is used differently from English "to be" — it is NOT used with adjectives.',
+    examples: [
+      {cn:'我是学生。',py:'Wǒ shì xuéshēng.',en:"I'm a student."},
+      {cn:'他是老师。',py:'Tā shì lǎoshī.',en:'He is a teacher.'},
+      {cn:'这是我的书。',py:'Zhè shì wǒ de shū.',en:'This is my book.'},
+    ],
+    note: '<strong>Common mistake:</strong> Do NOT say 我是好 (wǒ shì hǎo). For adjectives, use 很 (hěn) instead: 我很好.'
+  },
+  {
+    title: 'Adjective Predicate with 很 (hěn)',
+    sub: 'Describing with adjectives',
+    pattern: 'Subject + 很 + Adjective',
+    notes: 'In Chinese, to say someone IS something with an adjective, you use 很 (hěn) as a linking word. 很 usually means "very" but in this structure it can just be a link word.',
+    examples: [
+      {cn:'我很好。',py:'Wǒ hěn hǎo.',en:"I'm (very) well."},
+      {cn:'她很漂亮。',py:'Tā hěn piàoliang.',en:'She is beautiful.'},
+      {cn:'今天很冷。',py:'Jīntiān hěn lěng.',en:"Today is (very) cold."},
+    ],
+    note: '<strong>Note:</strong> Dropping 很 makes a comparison implied — 她漂亮 suggests "she is prettier (than someone)".'
+  },
+  {
+    title: '有 (yǒu) — Possession',
+    sub: 'Expressing "to have" or existence',
+    pattern: 'Subject + 有 + Object',
+    notes: '有 (yǒu) expresses both possession (have) and existence (there is). The negative form 没有 (méiyǒu) is very common.',
+    examples: [
+      {cn:'我有一本书。',py:'Wǒ yǒu yī běn shū.',en:'I have a book.'},
+      {cn:'他没有钱。',py:'Tā méiyǒu qián.',en:"He doesn't have money."},
+      {cn:'这里有咖啡吗？',py:'Zhèlǐ yǒu kāfēi ma?',en:'Is there coffee here?'},
+    ],
+    note: '<strong>Key difference:</strong> 有 is negated with 没 (méi), NOT with 不 (bù). Say 没有, never 不有.'
+  },
+  {
+    title: '吗 (ma) — Yes/No Questions',
+    sub: 'Forming simple questions',
+    pattern: 'Statement + 吗？',
+    notes: 'Add 吗 (ma) to the end of any statement to turn it into a yes/no question. It is the simplest way to ask questions in Mandarin.',
+    examples: [
+      {cn:'你好吗？',py:'Nǐ hǎo ma?',en:'How are you? (Are you well?)'},
+      {cn:'你是学生吗？',py:'Nǐ shì xuéshēng ma?',en:'Are you a student?'},
+      {cn:'你有手机吗？',py:'Nǐ yǒu shǒujī ma?',en:'Do you have a phone?'},
+    ],
+    note: '<strong>Answers:</strong> Reply positively by repeating the verb: 是 or 有. Reply negatively with 不是 or 没有.'
+  },
+  {
+    title: '不 (bù) — Negation',
+    sub: 'Making sentences negative',
+    pattern: 'Subject + 不 + Verb/Adjective',
+    notes: '不 (bù) negates verbs and adjectives. Its tone changes to 2nd tone (bú) before another 4th tone word.',
+    examples: [
+      {cn:'我不吃肉。',py:'Wǒ bù chī ròu.',en:"I don't eat meat."},
+      {cn:'他不是老师。',py:'Tā bú shì lǎoshī.',en:'He is not a teacher.'},
+      {cn:'今天不冷。',py:'Jīntiān bù lěng.',en:"Today is not cold."},
+    ],
+    note: '<strong>Exception:</strong> 有 (yǒu) is negated with 没 (méi), not 不: 没有, NOT 不有.'
+  },
+  {
+    title: '的 (de) — Possession & Modification',
+    sub: "Possessive particle (like 's)",
+    pattern: 'Owner + 的 + Noun',
+    notes: '的 (de) connects a possessor to what is possessed, or links an adjective/verb phrase to a noun. It works like "\'s" in English.',
+    examples: [
+      {cn:'我的书',py:'wǒ de shū',en:'my book'},
+      {cn:'老师的学生',py:'lǎoshī de xuéshēng',en:"the teacher's student"},
+      {cn:'好看的猫',py:'hǎokàn de māo',en:'a pretty cat'},
+    ],
+    note: '<strong>Shortcut:</strong> With close relationships (family, close friends), 的 is often dropped: 我妈妈 (my mom) instead of 我的妈妈.'
+  },
+  {
+    title: 'Time Words Before the Verb',
+    sub: 'Placing time in a sentence',
+    pattern: 'Subject + Time + Verb + Object',
+    notes: 'In Chinese, time expressions come BEFORE the verb (not at the end like in English). They can also go at the start of the sentence.',
+    examples: [
+      {cn:'我今天吃饺子。',py:'Wǒ jīntiān chī jiǎozi.',en:'I eat dumplings today.'},
+      {cn:'明天我去学校。',py:'Míngtiān wǒ qù xuéxiào.',en:'Tomorrow I go to school.'},
+      {cn:'现在几点？',py:'Xiànzài jǐ diǎn?',en:'What time is it now?'},
+    ],
+    note: '<strong>Order rule:</strong> Larger time unit → smaller time unit: 今年三月二十号 (this year, March 20th).'
+  },
+  {
+    title: '在 (zài) — Location',
+    sub: 'Expressing where something is',
+    pattern: 'Subject + 在 + Place',
+    notes: '在 (zài) means "at / in / on" and is used to indicate location. When used as a verb, it comes before the place.',
+    examples: [
+      {cn:'我在家。',py:'Wǒ zài jiā.',en:"I'm at home."},
+      {cn:'老师在学校。',py:'Lǎoshī zài xuéxiào.',en:'The teacher is at school.'},
+      {cn:'书在桌子上。',py:'Shū zài zhuōzi shàng.',en:'The book is on the table.'},
+    ],
+    note: '<strong>Position words:</strong> 上 (shàng=on/above), 下 (xià=below), 里 (lǐ=inside) follow the place noun.'
+  },
+  {
+    title: '几 and 多少 — Asking Quantities',
+    sub: 'Question words for numbers',
+    pattern: 'Subject + Verb + 几/多少 + Measure + Noun?',
+    notes: '几 (jǐ) is used for smaller numbers (usually under 10), while 多少 (duōshao) is used for any amount. Both replace the number in the sentence.',
+    examples: [
+      {cn:'你有几本书？',py:'Nǐ yǒu jǐ běn shū?',en:'How many books do you have?'},
+      {cn:'多少钱？',py:'Duōshao qián?',en:'How much money? / How much does it cost?'},
+      {cn:'现在几点？',py:'Xiànzài jǐ diǎn?',en:'What time is it now?'},
+    ],
+    note: '<strong>Shopping tip:</strong> 多少钱？is the essential phrase for asking prices when shopping in China!'
+  },
+];
+
+// ═══════════════════════════════ PINYIN ════════════════════════════════
+
+let currentPinyinGroup = 'all';
+
+function renderPinyin() {
+  const grid = document.getElementById('pinyinGrid');
+  const filtered = currentPinyinGroup === 'all' ? INITIALS : INITIALS.filter(i => i.g === currentPinyinGroup);
+  grid.innerHTML = filtered.map((ini, idx) => `
+    <div class="pinyin-card" onclick="showPinyinDetail(${INITIALS.indexOf(ini)})" id="pc-${INITIALS.indexOf(ini)}">
+      <div class="roman">${ini.r}</div>
+      <div class="tones-row">
+        <div class="tone-dot has"></div>
+        <div class="tone-dot has"></div>
+        <div class="tone-dot has"></div>
+        <div class="tone-dot has"></div>
+      </div>
+    </div>
+  `).join('');
+
+  const finalsGrid = document.getElementById('finalsGrid');
+  finalsGrid.innerHTML = FINALS.map(f => `
+    <div class="pinyin-card" style="cursor:default">
+      <div class="roman">${f.r}</div>
+      <div style="font-size:11px;color:#aaa;margin-top:4px">${f.m}</div>
+    </div>
+  `).join('');
+}
+
+function filterPinyin(group, btn) {
+  currentPinyinGroup = group;
+  document.querySelectorAll('#section-pinyin .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pinyinDetail').classList.remove('visible');
+  renderPinyin();
+}
+
+function showPinyinDetail(idx) {
+  const ini = INITIALS[idx];
+  document.querySelectorAll('.pinyin-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById('pc-' + idx);
+  if (card) card.classList.add('active');
+  const detail = document.getElementById('pinyinDetail');
+  detail.classList.add('visible');
+  detail.innerHTML = `
+    <div class="detail-top">
+      <div class="detail-big">${ini.r}</div>
+      <div class="detail-info">
+        <h3>${ini.r.toUpperCase()} Initial — ${ini.g.charAt(0).toUpperCase() + ini.g.slice(1)} Consonant</h3>
+        <p style="color:#888;font-size:14px;margin-bottom:12px">Example: <strong>${ini.ex}</strong> · ${ini.ch} · "${ini.m}"</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="background:var(--red-light);color:var(--red);font-size:12px;padding:4px 12px;border-radius:20px;font-weight:600">${ini.g}</span>
+          <span style="background:var(--paper2);color:var(--ink2);font-size:12px;padding:4px 12px;border-radius:20px">initial consonant</span>
+        </div>
+      </div>
+    </div>
+    <div class="section-label">Four Tones with "${ini.r}"</div>
+    <div class="tone-cards">
+      ${['1st — high level','2nd — rising','3rd — dip-rise','4th — falling'].map((desc, i) => {
+        const marks = ['ā','á','ǎ','à'];
+        const syllable = ini.r === 'y' ? ['yī','yí','yǐ','yì'][i] :
+                         ini.r === 'w' ? ['wū','wú','wǔ','wù'][i] :
+                         ini.r + 'a';
+        return `<div class="tone-card">
+          <div class="tone-syllable">${ini.r + marks[i]}</div>
+          <div class="tone-mark">${desc}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+  detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ═══════════════════════════════ WORDS ════════════════════════════════
+
+let currentWordCat = 'all';
+
+function renderWords() {
+  const container = document.getElementById('wordContainer');
+  const catMap = {};
+  const filtered = currentWordCat === 'all' ? WORDS : WORDS.filter(w => w.c === currentWordCat);
+  filtered.forEach(w => {
+    if (!catMap[w.c]) catMap[w.c] = [];
+    catMap[w.c].push(w);
+  });
+  let html = '';
+  for (const [cat, words] of Object.entries(catMap)) {
+    html += `<div class="category-header"><h3>${cat.charAt(0).toUpperCase() + cat.slice(1)}</h3><span class="count-badge">${words.length}</span></div>`;
+    html += `<div class="word-grid">`;
+    words.forEach((w, i) => {
+      const id = `wc-${cat}-${i}`;
+      html += `<div class="word-card" id="${id}" onclick="flipWord('${id}')">
+        <div class="word-front">
+          <div class="word-hanzi">${w.h}</div>
+          <div class="word-pinyin">${w.p}</div>
+          <span class="word-type">${w.t}</span>
+          <div class="flip-hint">tap to reveal</div>
+        </div>
+        <div class="word-back">
+          <div class="word-back-inner">
+            <div class="word-meaning">${w.e}</div>
+            <div class="word-hanzi" style="font-size:28px">${w.h}</div>
+            <div style="background:var(--paper);border-radius:8px;padding:10px 12px;margin-top:4px">
+              <div class="word-example">${w.ex}</div>
+              <div class="word-example-en">${w.ep}</div>
+              <div class="word-example-en" style="margin-top:2px">${w.ee}</div>
+            </div>
+          </div>
+          <div class="flip-hint">tap to flip back</div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  container.innerHTML = html;
+}
+
+function flipWord(id) {
+  document.getElementById(id).classList.toggle('flipped');
+}
+
+function filterWords(cat, btn) {
+  currentWordCat = cat;
+  document.querySelectorAll('#wordCatTabs .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderWords();
+}
+
+// ═══════════════════════════════ GRAMMAR ════════════════════════════════
+
+function renderGrammar() {
+  const list = document.getElementById('grammarList');
+  list.innerHTML = GRAMMAR.map((g, i) => `
+    <div class="grammar-card" id="gc-${i}">
+      <div class="grammar-header" onclick="toggleGrammar(${i})">
+        <div class="grammar-header-left">
+          <div class="grammar-num">${i+1}</div>
+          <div>
+            <div class="grammar-title">${g.title}</div>
+            <div class="grammar-subtitle">${g.sub}</div>
+          </div>
+        </div>
+        <div class="grammar-toggle">⌄</div>
+      </div>
+      <div class="grammar-body">
+        <p style="font-size:14px;color:var(--ink2);line-height:1.7;margin-top:1rem">${g.notes}</p>
+        <div class="pattern-box">
+          <div class="pattern-label">Pattern</div>
+          ${g.pattern}
+        </div>
+        <div class="grammar-examples">
+          ${g.examples.map(ex => `
+            <div class="grammar-example">
+              <div class="ge-cn">${ex.cn}</div>
+              <div class="ge-py">${ex.py}</div>
+              <div class="ge-en">${ex.en}</div>
+            </div>
+          `).join('')}
+        </div>
+        ${g.note ? `<div class="grammar-note">💡 ${g.note}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleGrammar(i) {
+  document.getElementById('gc-'+i).classList.toggle('open');
+}
+
+// ═══════════════════════════════ NAV ════════════════════════════════
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ═══════════════════════════════ QUIZ ════════════════════════════════
+
+let quizMode = 'words';
+let quizQ = 0, quizScore = 0, quizTotal = 10;
+let quizItems = [];
+let quizAnswered = false;
+
+function startQuiz(mode) {
+  quizMode = mode;
+  quizQ = 0; quizScore = 0; quizAnswered = false;
+  if (mode === 'words') {
+    const shuffled = [...WORDS].sort(() => Math.random()-0.5);
+    quizItems = shuffled.slice(0, quizTotal);
+  } else {
+    const shuffled = [...INITIALS].sort(() => Math.random()-0.5);
+    quizItems = shuffled.slice(0, quizTotal);
+  }
+  document.getElementById('quizOverlay').classList.add('open');
+  document.getElementById('quizTitle').textContent = mode === 'words' ? 'Vocabulary Quiz' : 'Pinyin Quiz';
+  renderQuizQ();
+}
+
+function renderQuizQ() {
+  quizAnswered = false;
+  document.getElementById('quizNext').classList.remove('show');
+  document.getElementById('quizFeedback').textContent = '';
+  const progress = ((quizQ) / quizTotal) * 100;
+  document.getElementById('quizProgress').style.width = progress + '%';
+  document.getElementById('quizScore').textContent = `Question ${quizQ+1} / ${quizTotal} · Score: ${quizScore}`;
+
+  let qHTML = '', options = [];
+  if (quizMode === 'words') {
+    const item = quizItems[quizQ];
+    document.getElementById('quizQ').innerHTML = `<span style="font-family:'Noto Serif SC',serif">${item.h}</span>`;
+    const correct = item.e;
+    const others = WORDS.filter(w => w.e !== correct).sort(() => Math.random()-0.5).slice(0,3).map(w => w.e);
+    options = [correct, ...others].sort(() => Math.random()-0.5);
+    document.getElementById('quizOptions').innerHTML = options.map(o =>
+      `<div class="quiz-opt" onclick="answerQuiz(this,'${o.replace(/'/g,"\\'")}','${correct.replace(/'/g,"\\'")}')">
+        ${o}
+      </div>`
+    ).join('');
+  } else {
+    const item = quizItems[quizQ];
+    document.getElementById('quizQ').innerHTML = item.r;
+    const correct = item.ch;
+    const others = INITIALS.filter(i => i.ch !== correct).sort(() => Math.random()-0.5).slice(0,3).map(i => i.ch);
+    options = [correct, ...others].sort(() => Math.random()-0.5);
+    document.getElementById('quizOptions').innerHTML = options.map(o =>
+      `<div class="quiz-opt" style="font-family:'Noto Serif SC',serif;font-size:28px" onclick="answerQuiz(this,'${o}','${correct}')">
+        ${o}
+      </div>`
+    ).join('');
+  }
+}
+
+function answerQuiz(el, chosen, correct) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const allOpts = document.querySelectorAll('.quiz-opt');
+  allOpts.forEach(o => {
+    const txt = o.textContent.trim();
+    if (txt === correct) o.classList.add('correct');
+    else if (txt === chosen && chosen !== correct) o.classList.add('wrong');
+  });
+  if (chosen === correct) {
+    quizScore++;
+    document.getElementById('quizFeedback').textContent = '✓ Correct!';
+    document.getElementById('quizFeedback').style.color = 'var(--sage)';
+  } else {
+    document.getElementById('quizFeedback').textContent = '✗ Incorrect';
+    document.getElementById('quizFeedback').style.color = 'var(--red)';
+  }
+  document.getElementById('quizNext').classList.add('show');
+}
+
+function nextQuestion() {
+  quizQ++;
+  if (quizQ >= quizTotal) {
+    document.getElementById('quizQ').innerHTML = `🎉`;
+    document.getElementById('quizOptions').innerHTML = '';
+    document.getElementById('quizProgress').style.width = '100%';
+    document.getElementById('quizScore').textContent = `Quiz complete!`;
+    document.getElementById('quizFeedback').textContent = '';
+    document.getElementById('quizNext').textContent = 'Close';
+    document.getElementById('quizNext').classList.add('show');
+    document.getElementById('quizNext').onclick = closeQuiz;
+    document.querySelector('.quiz-modal h2').textContent = `Score: ${quizScore} / ${quizTotal}`;
+  } else {
+    renderQuizQ();
+  }
+}
+
+function closeQuiz() {
+  document.getElementById('quizOverlay').classList.remove('open');
+  document.getElementById('quizNext').onclick = nextQuestion;
+  document.getElementById('quizNext').textContent = 'Next →';
+}
+
+document.getElementById('quizOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeQuiz();
+});
+
+// ═══════════════════════════════ INIT ════════════════════════════════
+renderPinyin();
+renderWords();
+renderGrammar();
+</script>
+</body>
+</html>
